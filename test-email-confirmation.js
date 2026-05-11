@@ -6,12 +6,20 @@
 
 const { createClient } = require('@supabase/supabase-js')
 
-const supabaseURL = 'https://tokhxfjhspcmlhebafxi.supabase.co'
-const supabaseAnonKey = process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY || ''
+function normalizeSupabaseUrl(url) {
+  let u = (url || '').trim()
+  u = u.replace(/\/+$/, '')
+  u = u.replace(/\/rest\/v1\/?$/i, '')
+  return u
+}
 
-if (!supabaseAnonKey) {
-  console.error('❌ NEXT_PUBLIC_SUPABASE_ANON_KEY environment variable is not set')
-  console.log('Please set it in your .env.local file or export it before running this test')
+const supabaseURL = normalizeSupabaseUrl(process.env.NEXT_PUBLIC_SUPABASE_URL || '')
+const supabaseAnonKey = (process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY || '').trim()
+
+if (!supabaseURL || !supabaseAnonKey) {
+  console.error(
+    '❌ Set NEXT_PUBLIC_SUPABASE_URL and NEXT_PUBLIC_SUPABASE_ANON_KEY (e.g. from .env.local)'
+  )
   process.exit(1)
 }
 
@@ -132,7 +140,7 @@ async function testEmailConfirmationFlow() {
     console.log('4️⃣  Testing session cookie syncing...')
     
     // Simulate the cookie syncing logic from supabaseClient.js
-    const projectRef = supabaseURL.split('//')[1]?.split('.')[0] || 'tokhxfjhspcmlhebafxi'
+    const projectRef = supabaseURL.split('//')[1]?.split('.')[0] || ''
     const authCookieName = `sb-${projectRef}-auth-token`
     
     const session = signInData.session

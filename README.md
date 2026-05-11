@@ -84,7 +84,7 @@ NEXT_PUBLIC_SUPABASE_ANON_KEY=your-anon-key-here
    - **Project URL** → `NEXT_PUBLIC_SUPABASE_URL`
    - **anon/public key** → `NEXT_PUBLIC_SUPABASE_ANON_KEY`
 
-**Note**: The Supabase URL is currently hardcoded in `lib/supabaseClient.js`. For production, ensure you use environment variables for both URL and key.
+**Note**: Set `NEXT_PUBLIC_SUPABASE_URL` to your project base URL only — `https://YOUR_REF.supabase.co` — not the REST endpoint (`/rest/v1`).
 
 ## Running the Application
 
@@ -300,16 +300,32 @@ All Scrum-related documents are located in the `SCRUM_DOCUMENTS/` directory:
 
 ### Deploy on Vercel
 
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
+The easiest way to deploy this Next.js app is the [Vercel dashboard](https://vercel.com/new).
 
-1. Push your code to GitHub
-2. Import your repository on Vercel
-3. Add your environment variables in Vercel's project settings:
-   - `NEXT_PUBLIC_SUPABASE_URL`
-   - `NEXT_PUBLIC_SUPABASE_ANON_KEY`
-4. Deploy!
+1. **Commit and push** this repo to GitHub (`main` or your default branch).
+2. In Vercel: **Add New… → Project** → **Import** `SlugConnect` (or your fork).
+3. **Framework Preset** should detect **Next.js**. Leave defaults unless you use a monorepo root override.
+4. **Environment Variables** (add before the first deploy so the build succeeds):
 
-Check out the [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.
+   | Name | Value |
+   |------|--------|
+   | `NEXT_PUBLIC_SUPABASE_URL` | Same as local: `https://<project-ref>.supabase.co` (no `/rest/v1`) |
+   | `NEXT_PUBLIC_SUPABASE_ANON_KEY` | Supabase → Project Settings → API → `anon` **public** key |
+
+   Apply these to **Production** and **Preview** (pull-request builds need them too).
+
+5. Click **Deploy**. Fix any build errors from the deployment log.
+
+6. **Supabase Auth URLs** (after you have a live URL like `https://slugconnect.vercel.app`):
+
+   In Supabase → **Authentication** → **URL Configuration**:
+
+   - **Site URL**: your production URL (or keep localhost for dev-only testing).
+   - **Redirect URLs**: add `http://localhost:3000/**`, `https://YOUR_DEPLOYMENT.vercel.app/**`, and optional `https://YOUR_CUSTOM_DOMAIN/**`.
+
+Without step 4, the build can succeed only if env vars are optional—but this app **requires** both variables at runtime/build for `NEXT_PUBLIC_*` inlining.
+
+See also [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying).
 
 ## Learn More
 
