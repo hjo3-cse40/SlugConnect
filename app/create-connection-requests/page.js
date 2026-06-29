@@ -33,9 +33,9 @@ export default function CreateConnectionRequestsPage() {
         return
       }
 
-      // Get Sam Jo's profile from dummy_data to confirm
+      // Get Sam Jo's profile from profiles to confirm
       const { data: samJoProfile, error: profileError } = await supabase
-        .from('dummy_data')
+        .from('profiles')
         .select('id, name')
         .eq('id', user.id)
         .single()
@@ -49,9 +49,9 @@ export default function CreateConnectionRequestsPage() {
       const samJoId = user.id
       console.log('Sam Jo ID:', samJoId, 'Name:', samJoProfile.name)
 
-      // Get all other users from dummy_data (excluding Sam Jo)
+      // Get all other users from profiles (excluding Sam Jo)
       const { data: allUsers, error: usersError } = await supabase
-        .from('dummy_data')
+        .from('profiles')
         .select('id, name')
         .neq('id', samJoId)
 
@@ -73,13 +73,13 @@ export default function CreateConnectionRequestsPage() {
       if (resetMode) {
         // Delete all requests where user is receiver (both pending and accepted)
         const { error: deleteReceiverError } = await supabase
-          .from('sample_connection_requests')
+          .from('connection_requests')
           .delete()
           .eq('receiver_id', samJoId)
 
         // Also delete all requests where user is sender (both pending and accepted)
         const { error: deleteSenderError } = await supabase
-          .from('sample_connection_requests')
+          .from('connection_requests')
           .delete()
           .eq('sender_id', samJoId)
 
@@ -95,7 +95,7 @@ export default function CreateConnectionRequestsPage() {
       let existingSenderIds = new Set()
       if (!resetMode) {
         const { data: existingRequests } = await supabase
-          .from('sample_connection_requests')
+          .from('connection_requests')
           .select('sender_id, receiver_id')
           .eq('receiver_id', samJoId)
 
@@ -124,7 +124,7 @@ export default function CreateConnectionRequestsPage() {
 
       // Insert all requests
       const { data: inserted, error: insertError } = await supabase
-        .from('sample_connection_requests')
+        .from('connection_requests')
         .insert(requests)
         .select()
 

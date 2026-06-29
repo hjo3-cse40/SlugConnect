@@ -107,7 +107,7 @@ export default function DiscoverPage() {
 
       // Load all profiles (excluding current user)
       const { data, error } = await supabase
-        .from('dummy_data') // table name
+        .from('profiles')
         .select('*') // select all columns
         .neq('id', user.id); // exclude current user
 
@@ -131,7 +131,7 @@ export default function DiscoverPage() {
       }
 
       const { data, error } = await supabase
-        .from('dummy_data') // table name for user interests
+        .from('profiles')
         .select('*') // select all columns
         .eq('id', user.id) // use authenticated user's ID
         .single(); // expect a single record

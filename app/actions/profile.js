@@ -29,7 +29,7 @@ export async function createProfile(profileData) {
 
     // Prepare profile data with user ID
     // Note: college is optional and can be added later via profile edit
-    // Note: dummy_data table doesn't have email column, so we exclude it
+    // Note: profiles table doesn't have email column, so we exclude it
     const profile = {
       id: user.id,
       name: profileData.full_name,
@@ -42,9 +42,8 @@ export async function createProfile(profileData) {
 
     console.log('Profile data to save:', profile)
 
-    // Upsert into dummy_data table (as mentioned, this is the current table name)
     const { data, error: dbError } = await supabase
-      .from('dummy_data')
+      .from('profiles')
       .upsert(profile, { onConflict: 'id' })
       .select()
 
@@ -79,7 +78,7 @@ export async function getCurrentUserProfile() {
     console.log('Fetching profile for user:', user.id, user.email)
 
     const { data, error } = await supabase
-      .from('dummy_data')
+      .from('profiles')
       .select('*')
       .eq('id', user.id)
       .single()

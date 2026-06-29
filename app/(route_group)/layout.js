@@ -16,7 +16,6 @@ export default async function NavLayout({ children }) {
 
   // If not authenticated, redirect to login page
   if (!user || error) {
-    // Log for debugging (remove in production)
     if (error) {
       console.error('Auth error in layout:', error.message)
     }

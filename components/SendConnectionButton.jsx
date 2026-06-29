@@ -28,7 +28,7 @@ export default function SendConnectionButton({ receiverId, receiverName }) {
       // Check if connection request already exists in either direction
       // Query for requests where current user is sender and receiverId is receiver
       const { data: sentRequest, error: sentError } = await supabase
-        .from('sample_connection_requests')
+        .from('connection_requests')
         .select('status, sender_id, receiver_id')
         .eq('sender_id', user.id)
         .eq('receiver_id', receiverId)
@@ -40,7 +40,7 @@ export default function SendConnectionButton({ receiverId, receiverName }) {
 
       // Query for requests where receiverId is sender and current user is receiver
       const { data: receivedRequest, error: receivedError } = await supabase
-        .from('sample_connection_requests')
+        .from('connection_requests')
         .select('status, sender_id, receiver_id')
         .eq('sender_id', receiverId)
         .eq('receiver_id', user.id)
@@ -88,7 +88,7 @@ export default function SendConnectionButton({ receiverId, receiverName }) {
     try {
       // Check for existing request one more time to prevent duplicates
       const { data: existing } = await supabase
-        .from('sample_connection_requests')
+        .from('connection_requests')
         .select('id')
         .eq('sender_id', currentUserId)
         .eq('receiver_id', receiverId)
@@ -101,7 +101,7 @@ export default function SendConnectionButton({ receiverId, receiverName }) {
       }
 
       const { data, error } = await supabase
-        .from('sample_connection_requests')
+        .from('connection_requests')
         .insert({
           sender_id: currentUserId,
           receiver_id: receiverId,

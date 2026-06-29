@@ -31,7 +31,7 @@ export default function ConnectionsPage() {
 
     // Fetch pending requests (where current user is the receiver)
     const { data: pendingData, error: pendingError } = await supabase
-      .from('sample_connection_requests')
+      .from('connection_requests')
       .select(`
         id,
         status,
@@ -56,7 +56,7 @@ export default function ConnectionsPage() {
 
     // Fetch accepted connections (where current user is involved)
     const { data: acceptedData, error: acceptedError } = await supabase
-      .from('sample_connection_requests')
+      .from('connection_requests')
       .select(`
         id,
         status,
@@ -98,7 +98,7 @@ export default function ConnectionsPage() {
     setActionLoading(requestId)
 
     const { error } = await supabase
-      .from('sample_connection_requests')
+      .from('connection_requests')
       .update({ status: action }) // 'accepted' or 'rejected'
       .eq('id', requestId)
 

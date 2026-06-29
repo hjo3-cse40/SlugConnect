@@ -159,7 +159,7 @@ export default function ProfilePage() {
         }
 
         if (profileData) {
-          // Get email from auth user since dummy_data doesn't store it
+          // Get email from auth user since profiles doesn't store it
           const { data: { user } } = await supabase.auth.getUser()
 
           // Map the data from table to the profile
@@ -244,7 +244,7 @@ export default function ProfilePage() {
 
       //this loads data from the premade part of the supabase table, its mainly for testing
       const { data, error: upsertError } = await supabase
-        .from('dummy_data')
+        .from('profiles')
         .upsert(updates, { onConflict: 'id' })
         .select()
 
